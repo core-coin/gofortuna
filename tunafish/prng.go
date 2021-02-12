@@ -1,8 +1,8 @@
 package tunafish
 
 import (
-	"code.google.com/p/go.crypto/sha3"
 	"errors"
+	"golang.org/x/crypto/sha3"
 	"io"
 	"io/ioutil"
 	"sync"
@@ -98,7 +98,7 @@ func (rng *Tunafish) reseed() {
 	for i := 0; i < len(rng.pools); i++ {
 		if ((1 << uint32(i)) | rng.counter) != 0 {
 			rng.pools[i].Lock()
-			h := sha3.NewKeccak256()
+			h := sha3.NewLegacyKeccak256()
 			h.Write(rng.pools[i].hash)
 			s = append(s, h.Sum(nil)...)
 			rng.pools[i].hash = []byte{}
