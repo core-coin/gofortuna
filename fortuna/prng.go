@@ -230,6 +230,19 @@ func FromSeed(filename string) (*Fortuna, error) {
 	return rng, nil
 }
 
+// FromBytesSeed creates a new PRNG instance from the seed. This
+// can be used to start an RNG on start up.
+func FromBytesSeed(seed []byte) (*Fortuna, error) {
+	if len(seed) != SeedFileLength {
+		return nil, ErrInvalidSeed
+	}
+
+	rng := New()
+	rng.g.Write(seed)
+	rng.counter++
+	return rng, nil
+}
+
 // AutoUpdate runs in the background, updating the PRNG's seed file
 // every ten minutes. The shutdown channel should be closed when the
 // PRNG is to shut down; it will automatically shutdown the PRNG and
