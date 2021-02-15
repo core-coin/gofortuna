@@ -1,8 +1,9 @@
 package tunafish
 
 import (
-	"code.google.com/p/go.crypto/sha3"
-	"code.google.com/p/go.crypto/twofish"
+	"golang.org/x/crypto/sha3"
+	"golang.org/x/crypto/twofish"
+
 	"errors"
 )
 
@@ -55,7 +56,7 @@ func zero(bs []byte) {
 
 // Reseed reseeds the generator with the given arbitrary input.
 func (g *Generator) Reseed(s string) {
-	h := sha3.NewKeccak256()
+	h := sha3.NewLegacyKeccak256()
 	h.Write(g.key[:])
 	h.Write([]byte(s))
 	key := h.Sum(nil)
@@ -85,7 +86,7 @@ func (g *Generator) generateBlocks(k int) (r []byte, err error) {
 // Write performs the same operation as Reseed, but allows the
 // generator to be used as an io.Writer.
 func (g *Generator) Write(bs []byte) (int, error) {
-	h := sha3.NewKeccak256()
+	h := sha3.NewLegacyKeccak256()
 	h.Write(g.key[:])
 	h.Write(bs)
 	key := h.Sum(nil)
